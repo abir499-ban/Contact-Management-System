@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const app = express();
 const PORT= process.env.PORT;
 const Userrouter = require('./routes/user');
-
+const {restricttoLoggedinUsersonly} = require('./middleware/restrict')
 
 
 app.use(cors());
@@ -22,7 +22,10 @@ app.get('/', (req,res)=>{
     return res.end("Hello world");
 })
 
-
+app.use('/protected' , restricttoLoggedinUsersonly, (req,res) =>{
+    
+    return res.status(201).json({message:req.user});
+});
 app.use('/api/user', Userrouter);
 
 app.listen(PORT, async()=>{

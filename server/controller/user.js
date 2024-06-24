@@ -22,6 +22,7 @@ async function register(req,res){
             email:email,
             password: hashedpassword,
         })
+        console.log('user created');
         return res.status(201).json({user});
     } catch (err) {
 
