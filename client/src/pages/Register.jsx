@@ -19,7 +19,8 @@ const Register = () => {
     if (confirmpassword !== password) {
       toast.error("Password do not match!!");
       return;
-    } const Data = {
+    }
+    const Data = {
       name: name,
       email: email,
       password: password,
