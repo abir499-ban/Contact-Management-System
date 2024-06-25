@@ -1,19 +1,30 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AuthContext from '../context/Authcontext';
 
 const Login = () => {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
+  const {loginUser} = useContext(AuthContext)
 
   const handlesubmit = (e) =>{
     e.preventDefault();
-    axios.post('http://localhost:8000/api/user/login', {email, password})
-    .then((data) => console.log(data.data.token))
-    .catch((err) => console.log(err));
+    // axios.post('http://localhost:8000/api/user/login', {email, password})
+    // .then((data) => console.log(data.data.token))
+    // .catch((err) => toast.error(err.message));
+    const Data = {
+      email:email,
+      password:password,
+    }
+    loginUser(Data);
+
   }
   return (
     <>
+    <ToastContainer autoClose={2000} />
     <h1>LOG IN</h1>
     <form className='mt-3' onSubmit={handlesubmit}>
         <div>

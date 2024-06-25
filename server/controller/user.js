@@ -33,17 +33,22 @@ async function register(req,res){
 
 
 async function handlelogin(req,res){
-    const {email,password} = req.body;
+    try {
+        const {email,password} = req.body;
     //validatng all the details
-    if(!email || !password) return res.status(400).json({message:"All feilds are required"});
+    if(!email || !password)   return res.status(401).json({message:"All feilds are required"});
     //checking if the email exits
     const user = await USER.findOne({email:email});
-    if(!user) return res.status(400).json({message:'Invalid email address'});
+    if(!user) return res.status(401).json({message:"Invalid email address"})
     //matching the password
     const doesPasswordMatch = await bcrypt.compare(password, user.password);
     if(!doesPasswordMatch) return res.status(401).json({message:'Wrong Password'});
     const token = generateToken(user);
     return res.status(201).json({token});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message:"server error"});
+    }
 
 
 }

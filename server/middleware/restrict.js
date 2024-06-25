@@ -9,7 +9,8 @@ async function restricttoLoggedinUsersonly(req,res,next){
         try {
             const id = payload.id;
             const user = await User.findById(id).lean();
-            req.user = {...user, password:undefined}
+            req.user = {...user, password:undefined};
+            console.log("Authenticated");
             return next();
         } catch (err) {
             return res.status(500).json({message:"Server error occured"});
