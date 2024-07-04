@@ -38,13 +38,17 @@ async function handlelogin(req,res){
     //validatng all the details
     if(!email || !password)   return res.status(401).json({message:"All feilds are required"});
     //checking if the email exits
-    const user = await USER.findOne({email:email});
+    const user = await USER.findOne({email:email}).lean();
     if(!user) return res.status(401).json({message:"Invalid email address"})
     //matching the password
     const doesPasswordMatch = await bcrypt.compare(password, user.password);
     if(!doesPasswordMatch) return res.status(401).json({message:'Wrong Password'});
+    //Generating the token
     const token = generateToken(user);
-    return res.status(201).json({token});
+    //updating the user data to be saved
+    const sanitizedUser = {...user, password:undefined};
+    //sending the response
+    return res.status(201).json({token, sanitizedUser});
     } catch (error) {
         console.log(error);
         return res.status(500).json({message:"server error"});

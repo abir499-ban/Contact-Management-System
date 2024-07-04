@@ -7,9 +7,7 @@ function generateToken(user){
         email: user.email,
     }
 
-    return jwt.sign(payload,process.env.SECRET_KEY, {
-        expiresIn: "1h",
-    });
+    return jwt.sign(payload,process.env.SECRET_KEY);
 
 }
 

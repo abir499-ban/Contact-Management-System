@@ -1,12 +1,41 @@
-import {createContext, useState } from "react";
+import {createContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const AuthContext = createContext();
 
 const AuthContextProvider = ({children}) =>{
-    const [user,setuser]  =useState(null);
+    const [user,setuser]  = useState(null);
+    useEffect(()=>{
+        checkUserLoggedIn();
+    }, [])
 
+    //check if user is logged in
+    const checkUserLoggedIn = async() =>{
+        try{
+            let auth = null;
+            if(localStorage.getItem("token"))
+                auth = localStorage.getItem("token");
+            console.log("Auth:",auth);
+            const res = await fetch("http://localhost:8000/api/user/me",{
+                method:"GET",
+                headers:{
+                    authorization: `${auth}`,
+                },
+            })
+            const result = await res.json();
+            if(!result.message){
+                console.log("Authenticated");
+                console.log(result.user);
+                setuser(result.user);
+            }else{
+                console.log(result.message);
+            }
+        }
+        catch(err){
+            console.log(err.message);
+        }
+    }
     //login
     const loginUser = async (UserData) =>{
         try {
@@ -20,15 +49,16 @@ const AuthContextProvider = ({children}) =>{
 
             const result = await res.json();
             if(!result.message){
-                console.log(result.token);
+                console.log(result);
                 localStorage.setItem('token', result.token);
                 toast.success("Sucessfull login!!");
+                setuser(result.sanitizedUser);
             }else{
                 console.log(result.message);
                 toast.error(result.message);
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
     }
 
@@ -55,7 +85,7 @@ const AuthContextProvider = ({children}) =>{
             console.log(err);
         }
     }
-    return <AuthContext.Provider value={{loginUser, registerUser}}>
+    return <AuthContext.Provider value={{loginUser, registerUser, user, setuser}}>
         {children}
         </AuthContext.Provider>
 }

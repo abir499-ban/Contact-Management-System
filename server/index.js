@@ -22,10 +22,10 @@ app.get('/', (req,res)=>{
     return res.end("Hello world");
 })
 
-app.use('/protected' , restricttoLoggedinUsersonly, (req,res) =>{
+// app.use('/protected' , restricttoLoggedinUsersonly, (req,res) =>{
     
-    return res.status(201).json({message:req.user});
-});
+//     return res.status(201).json({message:req.user});
+// });
 app.use('/api/user', Userrouter);
 
 app.listen(PORT, async()=>{
