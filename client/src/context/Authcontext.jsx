@@ -1,4 +1,4 @@
-import {createContext, useEffect, useState } from "react";
+import {createContext, useEffect, useMemo, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,13 +10,13 @@ const AuthContextProvider = ({children}) =>{
         checkUserLoggedIn();
     }, [])
 
+
     //check if user is logged in
     const checkUserLoggedIn = async() =>{
         try{
             let auth = null;
             if(localStorage.getItem("token"))
                 auth = localStorage.getItem("token");
-            console.log("Auth:",auth);
             const res = await fetch("http://localhost:8000/api/user/me",{
                 method:"GET",
                 headers:{
@@ -26,7 +26,6 @@ const AuthContextProvider = ({children}) =>{
             const result = await res.json();
             if(!result.message){
                 console.log("Authenticated");
-                console.log(result.user);
                 setuser(result.user);
             }else{
                 console.log(result.message);
@@ -49,7 +48,6 @@ const AuthContextProvider = ({children}) =>{
 
             const result = await res.json();
             if(!result.message){
-                console.log(result);
                 localStorage.setItem('token', result.token);
                 toast.success("Sucessfull login!!");
                 setuser(result.sanitizedUser);

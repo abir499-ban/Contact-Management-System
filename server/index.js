@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const app = express();
 const PORT= process.env.PORT;
 const Userrouter = require('./routes/user');
+const ContactRouter = require('./routes/contact');
 const {restricttoLoggedinUsersonly} = require('./middleware/restrict')
 
 
@@ -27,6 +28,7 @@ app.get('/', (req,res)=>{
 //     return res.status(201).json({message:req.user});
 // });
 app.use('/api/user', Userrouter);
+app.use('/contact', ContactRouter);
 
 app.listen(PORT, async()=>{
     try{
