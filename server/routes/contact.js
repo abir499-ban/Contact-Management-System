@@ -4,7 +4,7 @@ const { validateContact, ContactModel } = require('../model/contact');
 const router = Router();
 const { restricttoLoggedinUsersonly } = require('../middleware/restrict');
 
-router.post('./createcontact', async (req, res) => {
+router.post('/createcontact', async (req, res) => {
     //const {name, address, email, phone} = req.body;
     const { error, value } = validateContact(req.body);
     if (error) return res.status(400).json({ Error: error.message });
