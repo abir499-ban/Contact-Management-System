@@ -19,6 +19,9 @@ const Navbar = () => {
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav ms-auto">
             {user ? <>
+            <li class="nav-item">
+              <Link class="nav-link" to={'/create'}>Create contact</Link>
+            </li>
               <li class="nav-item">
                 <button onClick={clearUser} className='btn btn-danger'>Logout</button>
               </li></> :

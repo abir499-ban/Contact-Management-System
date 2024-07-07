@@ -27,8 +27,14 @@ app.get('/', (req,res)=>{
     
 //     return res.status(201).json({message:req.user});
 // });
+app.use('/me', restricttoLoggedinUsersonly, (req,res) =>{
+    const user = req.user;
+    console.log(user);
+    return res.status(200).json({user});
+});
+
 app.use('/api/user', Userrouter);
-app.use('/contact', ContactRouter);
+app.use('/api/contact', ContactRouter);
 
 app.listen(PORT, async()=>{
     try{

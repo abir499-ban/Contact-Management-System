@@ -1,4 +1,5 @@
 import {createContext, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,7 +18,7 @@ const AuthContextProvider = ({children}) =>{
             let auth = null;
             if(localStorage.getItem("token"))
                 auth = localStorage.getItem("token");
-            const res = await fetch("http://localhost:8000/api/user/me",{
+            const res = await fetch("http://localhost:8000/me",{
                 method:"GET",
                 headers:{
                     authorization: `${auth}`,
@@ -26,6 +27,7 @@ const AuthContextProvider = ({children}) =>{
             const result = await res.json();
             if(!result.message){
                 console.log("Authenticated");
+                console.log(result.user);
                 setuser(result.user);
             }else{
                 console.log(result.message);
