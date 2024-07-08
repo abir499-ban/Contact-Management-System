@@ -2,11 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import AuthContext from '../context/Authcontext'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {Modal} from 'react-bootstrap'
 import Spinner from '../components/Spinner';
 
 const Mycontacts = () => {
   const { user } = useContext(AuthContext);
   const [loading, setloading]  = useState(false);
+  const [showModal, setshowModal]  = useState(false);
+  const [ModalData, setModalData]  = useState({});
   const id = user ? user._id : null;
   const Data = {
     id: id,
@@ -39,6 +42,24 @@ const Mycontacts = () => {
     }
   }
 
+  const deleteContact = async(id)=>{
+    try {
+      const res = await fetch(`http://localhost:8000/api/contact/deleteContact/${id}`, {
+        method:"DELETE"
+      })
+      const result = await res.json();
+      if(!result.Error){
+        toast.success(result.message);
+      }else{
+        toast.error(result.Error);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  
+
   useEffect(() => {
     getallcontacts();
   }, [])
@@ -51,7 +72,7 @@ const Mycontacts = () => {
     <>
       <ToastContainer autoClose={2000} />
       <h3>{user ? user.name : null}</h3>
-      <h2 className='mt-5'>My Contacts</h2>
+      <h2 className='mt-5'>My Contacts ({allContacts.length})</h2>
       {loading ? <Spinner splash="...Loading Contacts" /> : (<table class="table table-hover">
         <thead>
           <tr class="table-dark" >
@@ -63,7 +84,11 @@ const Mycontacts = () => {
         </thead>
         <tbody>
           {allContacts.map((contact) => (
-            <tr class="table-secondary" key={contact._id}>
+            <tr class="table-secondary" key={contact._id} onClick={()=>{
+              setshowModal(true);
+              setModalData({});
+              setModalData(contact);
+            }}>
               <th scope="row">{contact.name}</th>
               <td>{contact.address}</td>
               <td>{contact.email}</td>
@@ -73,10 +98,24 @@ const Mycontacts = () => {
         </tbody>
       </table>)}
 
+      <Modal show={showModal} onHide={()=> setshowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>{ModalData.name}</Modal.Title>
+        </Modal.Header>
 
+        <Modal.Body>
+          <p><strong>Address: </strong>{ModalData.address}</p>
+          <p><strong>Email: </strong>{ModalData.email}</p>
+          <p><strong>Phone: </strong>{ModalData.phone}</p>
+        </Modal.Body>
 
-      {/* 
-       */}
+        <Modal.Footer>
+          <button className='btn btn-danger'
+          onClick={()=>deleteContact(ModalData._id)}>
+            Delete Contact</button>
+        </Modal.Footer>
+      </Modal>
+
     </>
   )
 }
