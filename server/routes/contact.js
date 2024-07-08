@@ -60,15 +60,14 @@ router.put('/contact/:id', async (req, res) => {
 
 router.delete('/deleteContact/:id', async (req, res) => {
     const id = req.params.id;
-    if (!mongoose.isValidObjectId(id))
-        return res.status(401).json({ Error: "No contact exist with this id" });
     try {
         const contact = await ContactModel.findById(id);
-        if (contact.postedBy._id.toString() != req.user._id.toString())
-            return res.status(401).json({ Error: "Cannot delete other's contacts" });
+        if(!contact) return res.status(401).json({message:"No such contact exist"});
+        // if (contact.postedBy._id.toString() != req.user._id.toString())
+        //     return res.status(401).json({ Error: "Cannot delete other's contacts" });
         await ContactModel.findByIdAndDelete(id);
         return res.status(201).json({ message: 'Contact sucessfully deleted!!' });
-    } catch (error) {
+    } catch (err) {
         return res.status(500).json({ Error: err.message });
     }
 })
