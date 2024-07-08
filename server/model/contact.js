@@ -35,6 +35,7 @@ const validateContact = (data) =>{
         address: Joi.string().min(10).max(100).required(),
         email: Joi.string().email().required(),
         phone: Joi.number().max(9999999999).required(),
+        postedBy : Joi.allow()
     })
     return schema.validate(data);
 }

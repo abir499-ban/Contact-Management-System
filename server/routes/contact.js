@@ -15,8 +15,9 @@ router.post('/createcontact', async (req, res) => {
                 address: req.body.address,
                 email: req.body.email,
                 phone: req.body.phone,
-                postedBy: req.user._id
+                postedBy: req.body.postedBy
             })
+            console.log('Done');
             return res.status(201).json({ message: "Contact Created Succesfully" });
         } catch (err) {
             console.log(err);
@@ -27,9 +28,13 @@ router.post('/createcontact', async (req, res) => {
 
 })
 
-router.get('/mycontacts', async (req, res) => {
+router.post('/mycontacts', async (req, res) => {
+    const id = req.body.id;
+    if(!id) return res.status(400).json({Error : " User not logged in. Please log in first"})
     try {
-        const allContacts = await ContactModel.find({});
+        const allContacts = await ContactModel.find({
+            postedBy:id,
+        })
         return res.status(200).json({ message: allContacts });
     }
     catch (err) {

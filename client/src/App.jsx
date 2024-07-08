@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import D from './pages/D'
 import { AuthContextProvider } from './context/Authcontext'
 import { C } from './pages/C'
+import Mycontacts from './pages/Mycontacts'
 
 
 function App() {
@@ -13,16 +14,17 @@ function App() {
 
   return (
     <>
-        <BrowserRouter>
-          <Layout>
-            <Routes>
-              <Route path='/' element={<D />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/create' element={<C/>} />
-            </Routes>
-          </Layout>
-        </BrowserRouter>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route path='/' element={<D />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/create' element={<C />} />
+            <Route path='/mycontacts' element={<Mycontacts />} />
+          </Routes>
+        </Layout>
+      </BrowserRouter>
     </>
   )
 }

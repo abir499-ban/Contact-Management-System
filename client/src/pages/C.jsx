@@ -23,6 +23,8 @@ export const C = () => {
       phone,
       postedBy: user._id
     }
+    console.table(Data);
+
     const res = await fetch('http://localhost:8000/api/contact/createcontact',{
       method:"POST",
       headers:{
@@ -66,7 +68,7 @@ export const C = () => {
           <label for="exampleInputEmail1" class="form-label mt-4">Phone Number(INDIA: +91)</label>
           <input  type="number" value={phone} class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter phone number" onChange={(e)=> setphone(e.target.value)} required/>
         </div>
-        <button type='submit' className='mt-3 btn btn-primary'>Submit</button>
+        <button type='submit' className='mt-3 btn btn-success'>Create Contact</button>
       </form>
       </div>
     </>
