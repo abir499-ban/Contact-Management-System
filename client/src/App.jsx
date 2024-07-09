@@ -7,6 +7,7 @@ import D from './pages/D'
 import { AuthContextProvider } from './context/Authcontext'
 import { C } from './pages/C'
 import Mycontacts from './pages/Mycontacts'
+import Editcontact from './pages/Editcontact'
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/create' element={<C />} />
             <Route path='/mycontacts' element={<Mycontacts />} />
+            <Route path='/editcontact/:id' element={<Editcontact/>} />
           </Routes>
         </Layout>
       </BrowserRouter>

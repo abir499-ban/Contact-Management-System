@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {Modal} from 'react-bootstrap'
 import Spinner from '../components/Spinner';
+import { Link } from 'react-router-dom';
 
 const Mycontacts = () => {
   const { user } = useContext(AuthContext);
@@ -110,6 +111,10 @@ const Mycontacts = () => {
         </Modal.Body>
 
         <Modal.Footer>
+          <Link className='btn btn-info'
+          to={`/editcontact/${ModalData._id}`}>
+          Edit
+          </Link>
           <button className='btn btn-danger'
           onClick={()=>deleteContact(ModalData._id)}>
             Delete Contact</button>

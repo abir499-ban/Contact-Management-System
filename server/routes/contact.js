@@ -35,21 +35,22 @@ router.post('/mycontacts', async (req, res) => {
         const allContacts = await ContactModel.find({
             postedBy:id,
         })
-        return res.status(200).json({ message: allContacts });
+        return res.status(200).json({ message: allContacts.reverse() });
     }
     catch (err) {
         return res.status(500).json({ Error: err });
     }
 })
 
-router.put('/contact/:id', async (req, res) => {
+router.put('/editcontact/:id', async (req, res) => {
     const id = req.params.id;
-    if(!mongoose.isValidObjectId(id))
-        return res.status(401).json({ Error: "No contact exist with this id" });
+    // if(!mongoose.isValidObjectId(id))
+    //     return res.status(401).json({ Error: "No contact exist with this id" });
     try {
         const contact = await ContactModel.findById(id);
-        if (contact.postedBy._id.toString() != req.user._id.toString())
-            return res.status(401).json({ Error: "Cannot update other's contacts" });
+        // if (contact.postedBy._id.toString() != req.user._id.toString())
+        //     return res.status(401).json({ Error: "Cannot update other's contacts" });
+        if(!contact) return res.status(401).json({message:contact});
         const updatedData = {...req.body, id:undefined};
         await ContactModel.updateOne({_id:id}, updatedData);
         return res.status(200).json({message: 'Successfull Updation of contact'});
@@ -69,6 +70,18 @@ router.delete('/deleteContact/:id', async (req, res) => {
         return res.status(201).json({ message: 'Contact sucessfully deleted!!' });
     } catch (err) {
         return res.status(500).json({ Error: err.message });
+    }
+})
+
+router.get('/getcontact/:id', async(req, res)=>{
+    const id = req.params.id;
+    try {
+        const contact = await ContactModel.findById(id);
+        if(!contact) return res.status(401).json({Error : "No such contact found"});
+        return res.status(201).json({message : contact});
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({Error:err.message})
     }
 })
 
